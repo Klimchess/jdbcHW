@@ -22,4 +22,12 @@ public class City {
     public void setCity_name(String city_name) {
         this.city_name = city_name;
     }
+
+    @Override
+    public String toString() {
+        return "City{" +
+                "city_id=" + city_id +
+                ", city_name='" + city_name + '\'' +
+                '}';
+    }
 }
