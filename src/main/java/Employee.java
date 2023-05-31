@@ -63,7 +63,7 @@ public class Employee {
         return city;
     }
 
-    public void setCity(City city, String city_name) {
+    public void setCity(City city) {
         this.city = city;
     }
 }

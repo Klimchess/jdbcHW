@@ -11,7 +11,7 @@ public class RealizationEmployeeDao implements EmployeeDao {
     public void add(Employee employee) {
         try (final Connection connection = DriverManager.getConnection(url, user, password);
              PreparedStatement statement = connection.prepareStatement(
-                     "INSERT INTO  employee (first_name, last_name, gender, age, city_id) VALUES ((?),(?), (?), (?), (?))");){
+                     "INSERT INTO  employee (first_name, last_name, gender, age, city_id) VALUES ((?),(?), (?), (?), (?))");) {
             statement.setString(1, employee.getFirst_name());
             statement.setString(2, employee.getLast_name());
             statement.setString(3, employee.getGender());
@@ -30,20 +30,19 @@ public class RealizationEmployeeDao implements EmployeeDao {
         try (final Connection connection = DriverManager.getConnection(url, user, password);
              PreparedStatement statement = connection.prepareStatement(
                      "SELECT * FROM employee INNER JOIN city " +
-                             "ON employee.city_id = city.city_id = (?)")) {
-            statement.setInt(1,id);
+                             "ON employee.city_id = city.city_id WHERE id = (?)")) {
+            statement.setInt(1, id);
             ResultSet resultSet = statement.executeQuery();
-            while (resultSet.next()){
+            while (resultSet.next()) {
                 employee.setId(resultSet.getInt(1));
                 employee.setFirst_name(resultSet.getString("first_name"));
                 employee.setLast_name(resultSet.getString("last_name"));
                 employee.setGender(resultSet.getString("gender"));
                 employee.setAge(resultSet.getInt(5));
-                employee.setCity(new City(resultSet.getInt("city_id"), resultSet.getString("city_name")), resultSet.getString("city_name"));
-
+                employee.setCity(new City(resultSet.getInt("city_id"), resultSet.getString("city_name")));
             }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
         }
         return employee;
     }
@@ -53,7 +52,7 @@ public class RealizationEmployeeDao implements EmployeeDao {
         List<Employee> employees = new ArrayList<>();
         try (final Connection connection = DriverManager.getConnection(url, user, password);
              PreparedStatement statement = connection.prepareStatement(
-                     "SELECT * FROM employee INNER JOIN city " + "ON employee.city_id")) {
+                     "SELECT * FROM employee INNER JOIN city " + "ON employee.city_id = city.city_id ")) {
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 int id = Integer.parseInt(resultSet.getString("id"));
@@ -65,8 +64,9 @@ public class RealizationEmployeeDao implements EmployeeDao {
                 employees.add(new Employee(id, firstName, lastName, gender, age, city));
             }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
-        } return employees;
+            e.printStackTrace();
+        }
+        return employees;
     }
 
     @Override
@@ -83,7 +83,7 @@ public class RealizationEmployeeDao implements EmployeeDao {
             statement.executeUpdate();
 
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
         }
     }
 
@@ -92,9 +92,9 @@ public class RealizationEmployeeDao implements EmployeeDao {
         try (final Connection connection = DriverManager.getConnection(url, user, password);
              PreparedStatement statement = connection.prepareStatement(
                      "DELETE FROM employee WHERE id = (?)")) {
-            statement.setInt(2, id);
+            statement.setInt(1, id);
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
         }
 
     }

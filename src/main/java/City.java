@@ -4,7 +4,7 @@ public class City {
 
     public City(int city_id, String city_name) {
         this.city_id = city_id;
-        this.city_name = this.city_name;
+        this.city_name = city_name;
     }
 
     public int getCity_id() {
